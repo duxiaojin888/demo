@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	     http://www.springframework.org/schema/beans/spring-beans.xsd
+	       http://code.alibabatech.com/schema/dubbo
+	    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+<!-- 提供方应用信息，用于计算依赖关系 -->
+	<!--<dubbo:application name="hello-world-app"/>-->
+
+	<!-- 使用multicast广播注册中心暴露服务地址 -->
+	<!--<dubbo:registry address="multicast://224.5.6.7:1234"/>-->
+
+	<!-- 公共信息，也可以用dubbo.properties配置 -->
+	<dubbo:application name="annotation-provider"/>
+	<dubbo:registry protocol="dubbo" address="zookeeper://localhost:2181" port="20880"/>
+
+	<!-- 扫描注解包路径，多个包用逗号分隔，不填pacakge表示扫描当前ApplicationContext中所有的类 -->
+	<!--<dubbo:annotation package="com.dxjin"/>-->
+
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="dubbo" port="20880"/>
+	<dubbo:monitor protocol="registry"/>
+
+	<!--具体实现该接口的 bean-->
+	<bean id="testRegistryService" class="com.dxjin.dubbo.service.impl.test.TestRegistryServiceImpl"/>
+
+	<dubbo:service ref="testRegistryService" interface="com.dxjin.dubbo.demo.test.TestRegistryService" group="${dubbo.gege.group}"/>
+
+</beans>
